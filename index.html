@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pop Resume</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<script type="text/javascript">
+	function show(shown) {
+		var x = document.getElementsByClassName('content');
+		for (var i = 0; i < x.length; i++) {
+			x[i].style.display = 'none';
+		}
+		document.getElementById(shown).style.display = 'block';
+	}
+</script>
+
+<body>
+	<div id="container">
+		<div id="header">
+			<h1>Pop Sornsak Thiravechyan</h1>
+		</div>
+		<div id="content_container">
+			<nav>
+				<div id="nav">
+					<h3>Navigation</h3>
+					<ul>
+						<li><a href="#" onclick="show('home')">Home</a></li>
+						<li><a href="#" onclick="show('about')">About</a></li>
+						<li><a href="#" onclick="show('projects')">Projects</a></li>
+						<li><a href="#" onclick="show('contact')">Contact</a></li>
+					</ul>
+				</div>
+			</nav>
+			<div id="main">
+				<div id="home" class="content">
+					<h2>Home</h2>
+					<p>Heeello.</p>
+				</div>
+				<div id="about" class="content" style="display: none">
+					<h2>About</h2>
+					<p>Hi, I'm Pop.</p>
+					<p><a href="Pop-Thiravechyan-Resume-040817.doc" download="">Download My Resume!</a></p>
+					<h3>Education</h3>
+					<p><b>Purdue University</b> | West Lafayette, IN</p>
+					<p class="tab">Expected Graduation: December 2018</p>
+					<p class="tab">B.S. in Computer Science</p>
+					<p class="tab">Relevant Coursework: Systems Programming, Computer Architecture, Programming in C, Data Structure and Algorithms, Problem Solving &amp Object Oriented Programming, Foundation of Computer Science, Virtual Reality Applications</p>
+					<p><b>Ruamrudee International School</b> | Minburi, Thailand</p>
+					<p style="margin-left: 40px">June 2014</p>
+				</div>
+				<div id="projects" class="content" style="display: none">
+					<h2>Projects</h2>
+					<p>fbdfbdfbdgbdfs......</p>
+					<p><b>Music Visualizer</b> | Unreal Engine 4</p>
+					<p class="tab">May 2016</p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/jTdOXGTMoa8" frameborder="0" allowfullscreen></iframe>
+				</div>
+				<div id="contact" class="content" style="display: none">
+					<h2>Contact</h2>
+					<p>E-mail: sthirave@purdue.edu</p>
+					<p>Mobile: 707-342-5387</p>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			Copyright &copy; 2017 Pop Sornsak Thiravechyan
+		</div>
+	</div>
+</body>
+</html>
