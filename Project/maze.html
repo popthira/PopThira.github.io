@@ -1,13 +1,244 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Maze</title>
+	<style>
+		table {
+			margin: auto;
+			border-collapse: collapse;
+			width: calc(100vmin - 20px);
+			height: calc(100vmin - 20px);
+		}
+
+		td {
+			background-color: #FFF;
+		}
+
+		td.wall {
+			background-color: #000;
+		}
+
+		td.player {
+			background-color: #FF0000;
+		}
+
+		td.path {
+			background-color: #B00000;
+		}
+
+		td.goal {
+			background-color: #00FF00;
+		}
+	</style>
 </head>
 
-<script type="text/javascript">
-	
-</script>
-
 <body>
-	<p>Hi</p>
+	<script>
+		var mazeMatrix, mazeTable, size, prev, pR, pC, tmp;
+		
+		function gameStart() {
+			prev = 1;
+			size = 2;
+			document.body.appendChild(createMaze());
+		}
+
+		function createMaze() {
+			var floor = size * 2 + 1;
+			var i, j;
+
+			mazeMatrix = [];
+			mazeTable = document.createElement('TABLE');
+
+			// Make Matrix
+			for (i = 0; i < floor; i++) {
+				mazeMatrix[i] = new Array(floor).fill(1);
+			}
+
+			// Make Grid
+			for (i = 1; i < floor - 1; i += 2) {
+				for (j = 1; j < floor - 1; j += 2) {
+					mazeMatrix[i][j] = 0;
+				}
+			}
+
+			// Generate Maze
+			var set = new Array(size).fill(-1);
+			var current = new Array(size).fill(-1);
+			var next = new Array(size).fill(-1);
+			var height = new Array(size).fill(0);
+			var x, iTmp;
+			for (i = 0; i < size - 1; i++) {
+				x = 0;
+				iTmp = i * 2 + 1;
+				// Assigning Set Number
+				for (j = 0; j < size; j++) {
+					if (current[j] < 0) current[j] = x++;
+					else if (set[current[j]] < 0) {
+						set[current[j]] = x;
+						current[j] = x++;
+					} else {
+						current[j] = set[current[j]];
+					}
+				}
+				// Horizontal
+				set.fill(-1);
+				for (j = 0; j < size - 1; j++) {
+					// Lable the current[j+1] to the set it belong to
+					if ((x = set[current[j+1]]) > -1) {
+						while (set[x] > -1) x = set[x];
+						current[j+1] = x;
+					}
+					// Merge? Not merge?
+					if (current[j] != current[j+1] && Math.random() < 0.5) {
+						if (height[current[j]] > height[current[j+1]]) {
+							set[current[j+1]] = current[j];
+							current[j+1] = current[j];
+						} else if (height[current[j]] < height[current[j+1]]) {
+							set[current[j]] = current[j+1];
+						} else {
+							set[current[j+1]] = current[j];
+							current[j+1] = current[j];
+							height[current[j]]++;
+						}
+						// Add wall to matrix
+						mazeMatrix[iTmp][(j+1)*2] = 0;
+					}
+				}
+				// Re-number and group set together
+				for (j = 0; j < size; j++) {
+					if ((x = set[current[j]]) > -1) {
+						while (set[x] > -1) x = set[x];
+						set[current[j]] = x;
+						current[j] = x;
+					}
+				}
+				// Vertical
+				set.fill(-1);
+				height.fill(0);
+				for (j = 0; j < size; j++) {
+					if (Math.random() < 0.5) {
+						mazeMatrix[iTmp+1][j*2+1] = 0;
+						next[j] = current[j];
+						height[current[j]]++;
+					} else if (set[current[j]] < 0) {
+						set[current[j]] = j;
+					} else if (height[current[j]] == 0 && Math.random() < 0.2) {
+						set[current[j]] = j;
+					}
+				}
+				// Make sure each set have at least one vertical connection
+				for (j = 0; j < size; j++) {
+					if (set[j] > -1 && height[j] == 0) {
+						mazeMatrix[iTmp+1][set[j]*2+1] = 0;
+						next[set[j]] = j;
+					}
+				}
+				tmp = current;
+				current = next;
+				next = tmp;
+				next.fill(-1);
+				set.fill(-1);
+				height.fill(0);
+			}
+			// Handle the last row
+			iTmp += 2;
+			for (j = 0; j < size - 1; j++) {
+				if ((x = set[current[j+1]]) > -1) {
+					while (set[x] > -1) x = set[x];
+					current[j+1] = x;
+				}
+				if (current[j+1] < 0) {
+					current[j+1] = current[j];
+					mazeMatrix[iTmp][(j+1)*2] = 0;
+				} else if (current[j] < 0) {
+					mazeMatrix[iTmp][(j+1)*2] = 0;
+				} else if (current[j] != current[j+1]) {
+					if (height[current[j]] > height[current[j+1]]) {
+						set[current[j+1]] = current[j];
+						current[j+1] = current[j];
+					} else if (height[current[j]] < height[current[j+1]]) {
+						set[current[j]] = current[j+1];
+					} else {
+						set[current[j+1]] = current[j];
+						current[j+1] = current[j];
+						height[current[j]]++;
+					}
+						// Add wall to matrix
+						mazeMatrix[iTmp][(j+1)*2] = 0;
+					}
+				}
+
+			// Make table from matrix
+			var row, cell;
+			for (i = 0; i < floor; i++) {
+				row = mazeTable.insertRow(i);
+				for (j = 0; j < floor; j++) {
+					cell = row.insertCell(j);
+					if (mazeMatrix[i][j]) cell.classList.add('wall');
+				}
+			}
+
+			pR = 1;
+			pC = 1;
+			mazeTable.rows[1].cells[1].classList.add('player');
+			mazeTable.rows[size*2-1].cells[size*2-1].classList.add('goal');
+
+			return mazeTable;
+		}
+		
+		// Move Control
+		document.addEventListener('keydown', function(event) {
+			switch (event.keyCode) {
+				case 38: // Up
+				case 87: // W
+				if (!mazeMatrix[pR-1][pC]) {
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR--].cells[pC].classList.add('path');
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC].classList.add('player');
+				}
+				break;
+
+				case 40: // Down
+				case 83: // S
+				if (!mazeMatrix[pR+1][pC]) {
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR++].cells[pC].classList.add('path');
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC].classList.add('player');
+				}
+				break;
+				
+				case 37: // Left
+				case 65: // A
+				if (!mazeMatrix[pR][pC-1]) {
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC--].classList.add('path');
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC].classList.add('player');
+				}
+				break;
+				
+				case 39: // Right
+				case 68: // D
+				if (!mazeMatrix[pR][pC+1]) {
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC++].classList.add('path');
+					mazeTable.rows[pR].cells[pC].className = '';
+					mazeTable.rows[pR].cells[pC].classList.add('player');
+				}
+				break;
+			}
+			if (pR == size*2-1 && pC == size*2-1) {
+				tmp = prev + size;
+				prev = size;
+				size = tmp;
+				document.body.removeChild(document.body.getElementsByTagName('TABLE')[0]);
+				document.body.appendChild(createMaze());
+			}
+		}, false);
+
+		gameStart();
+	</script>
 </body>
 </html>

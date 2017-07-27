@@ -1,18 +1,18 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Pop Resume</title>
 	<link rel="stylesheet" type="text/css" href="style.css" />
-</head>
-
-<script type="text/javascript">
-	function show(shown) {
-		var x = document.getElementsByClassName('content');
-		for (var i = 0; i < x.length; i++) {
-			x[i].style.display = 'none';
+	<script>
+		function show(shown) {
+			var x = document.getElementsByClassName('content');
+			for (var i = 0; i < x.length; i++) {
+				x[i].style.display = 'none';
+			}
+			document.getElementById(shown).style.display = 'block';
 		}
-		document.getElementById(shown).style.display = 'block';
-	}
-</script>
+	</script>
+</head>
 
 <body>
 	<div id="container">
