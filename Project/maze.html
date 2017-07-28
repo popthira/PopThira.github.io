@@ -193,8 +193,10 @@
 				case 87: // W
 				if (!mazeMatrix[pR-1][pC]) {
 					mazeTable.rows[pR].cells[pC].className = '';
-					mazeTable.rows[pR--].cells[pC].classList.add('path');
-					mazeTable.rows[pR].cells[pC].className = '';
+					if (!mazeTable.rows[pR-1].cells[pC].classList.contains('path')) {
+						mazeTable.rows[pR].cells[pC].classList.add('path');
+					}
+					mazeTable.rows[--pR].cells[pC].className = '';
 					mazeTable.rows[pR].cells[pC].classList.add('player');
 				}
 				break;
@@ -203,8 +205,10 @@
 				case 83: // S
 				if (!mazeMatrix[pR+1][pC]) {
 					mazeTable.rows[pR].cells[pC].className = '';
-					mazeTable.rows[pR++].cells[pC].classList.add('path');
-					mazeTable.rows[pR].cells[pC].className = '';
+					if (!mazeTable.rows[pR+1].cells[pC].classList.contains('path')) {
+						mazeTable.rows[pR].cells[pC].classList.add('path');
+					}
+					mazeTable.rows[++pR].cells[pC].className = '';
 					mazeTable.rows[pR].cells[pC].classList.add('player');
 				}
 				break;
@@ -213,8 +217,10 @@
 				case 65: // A
 				if (!mazeMatrix[pR][pC-1]) {
 					mazeTable.rows[pR].cells[pC].className = '';
-					mazeTable.rows[pR].cells[pC--].classList.add('path');
-					mazeTable.rows[pR].cells[pC].className = '';
+					if (!mazeTable.rows[pR].cells[pC-1].classList.contains('path')) {
+						mazeTable.rows[pR].cells[pC].classList.add('path');
+					}
+					mazeTable.rows[pR].cells[--pC].className = '';
 					mazeTable.rows[pR].cells[pC].classList.add('player');
 				}
 				break;
@@ -223,8 +229,10 @@
 				case 68: // D
 				if (!mazeMatrix[pR][pC+1]) {
 					mazeTable.rows[pR].cells[pC].className = '';
-					mazeTable.rows[pR].cells[pC++].classList.add('path');
-					mazeTable.rows[pR].cells[pC].className = '';
+					if (!mazeTable.rows[pR].cells[pC+1].classList.contains('path')) {
+						mazeTable.rows[pR].cells[pC].classList.add('path');
+					}
+					mazeTable.rows[pR].cells[++pC].className = '';
 					mazeTable.rows[pR].cells[pC].classList.add('player');
 				}
 				break;
