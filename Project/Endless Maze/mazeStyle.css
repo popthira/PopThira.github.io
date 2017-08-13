@@ -1,0 +1,118 @@
+body {
+	background-color: #282828;
+	text-align: center;
+	color: #505050;
+}
+
+#menu.right {
+	float: right;
+	width: calc(100vw / 4 - 20px);
+}
+
+#menu.up {
+	height: calc(100vh / 4 - 20px);
+}
+
+button {
+	background-color: #282828;
+	color: #505050;
+	border: 2px solid #505050;
+	transition-duration: 0.4s;
+	width: 100px;
+}
+
+button:hover {
+	background-color: #505050;
+	color: #282828;
+	cursor: pointer;
+}
+
+button.on {
+	background-color: #505050;
+	color: #282828;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+table {
+	margin: auto;
+	border-collapse: collapse;
+}
+
+table.zeroL {
+	width: calc(100vmin - 20px);
+	height: calc(100vmin - 20px);
+}
+
+table.zeroS {
+	width: calc(100vmin * (3 / 4) - 20px);
+	height: calc(100vmin * (3 / 4) - 20px);
+}
+
+table.wideL {
+	width: calc(100vh * (987 / 610) - 20px);
+	height: calc(100vh - 20px);
+}
+
+table.wideM {
+	width: calc(100vw - 20px);
+	height: calc(100vw * (610 / 987) - 20px);
+}
+
+table.wideS {
+	width: calc(100vw * (3 / 4) - 20px);
+	height: calc(100vw * (3 / 4) * (610 / 987) - 20px);
+}
+
+table.tallL {
+	width: calc(100vw - 20px);
+	height: calc(100vw * (987 / 610) - 20px);
+}
+
+table.tallM {
+	width: calc(100vh * (610 / 987) - 20px);
+	height: calc(100vh - 20px);
+}
+
+table.tallS {
+	width: calc(100vh * (3 / 4) * (610 / 987) - 20px);
+	height: calc(100vh * (3 / 4) - 20px);
+}
+
+td {
+	background-color: #505050;
+}
+
+td.wall {
+	background-color: #282828;
+}
+
+td.player {
+	background-color: #B01189;
+}
+
+@keyframes pathAnimation {
+	from {background-color: #B01189}
+	to {background-color: #AF111C}
+}
+
+td.path {
+	background-color: #AF111C;
+	animation-name: pathAnimation;
+	animation-duration: 4s;
+}
+
+td.pathBot {
+	background-color: #AF111C;
+}
+
+td.trail {
+	background-color: #333;
+}
+
+td.goal {
+	background-color: #8911b0;
+}
