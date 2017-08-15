@@ -1,4 +1,5 @@
 var mazeMatrix, mazeTable, prev, size, setNum, level, pR, pC, pRM, pCM, tmp;
+var setSequenceM, setSequence;
 var addedResizeListener = false;
 var addedMoveListener = false;
 var bot = false;
@@ -10,6 +11,8 @@ var botButtons = document.getElementById('wallFollower');
 var list = document.getElementById('runtime');
 var pauseAble = 3
 var pauseLeft = pauseAble;
+var interval = 0;
+var speed = 0;
 
 function gameStart() {
 	prev = 0;
@@ -213,7 +216,7 @@ function createMaze() {
 	}
 
 	// Add player to the corrent location on the matrix
-	var setSequenceM = [
+	setSequenceM = [
 		[floor-1,1,1,floor-1],
 		[1,0,floor-1,floor-2],
 		[0,floor-2,floor-2,0],
@@ -223,7 +226,7 @@ function createMaze() {
 	pCM = setSequenceM[setNum][1];
 	mazeMatrix[setSequenceM[setNum][2]][setSequenceM[setNum][3]] = 0;
 	// Add player and goal to the corrent location on the table
-	var setSequence = [
+	setSequence = [
 		[floor-1,1,1,floor-1],
 		[1,mazeTable.rows[0].cells.length-floor,floor-1,mazeTable.rows[0].cells.length-2],
 		[mazeTable.rows.length-floor,floor-2,mazeTable.rows.length-2,0],
@@ -268,96 +271,117 @@ function moveControl(event) {
 	switch (tmp) {
 		case 38: // Up
 		case 87: // W
-		if (pRM-1 > -1) {
-			if (mazeTable.rows[pR-1].cells[pC].classList.contains('goal')) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('path');
-				nextLevel();
-			} else if (!mazeMatrix[pRM-1][pCM]) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				if (bot) {
-					if (mazeTable.rows[pR-1].cells[pC].classList.contains('pathBot')) mazeTable.rows[pR].cells[pC].classList.add('trail');
-					else mazeTable.rows[pR].cells[pC].classList.add('pathBot');
-				} else {
-					if (mazeTable.rows[pR-1].cells[pC].classList.contains('path')) mazeTable.rows[pR].cells[pC].classList.add('trail');
-					else mazeTable.rows[pR].cells[pC].classList.add('path');
+		if (pRM-1 == setSequenceM[setNum][2] && pCM == setSequenceM[setNum][3]) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('path');
+			nextLevel();
+		} else if (pRM-1 > -1 && mazeMatrix[pRM-1][pCM] < 1) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			if (bot) {
+				if (mazeMatrix[pRM-1][pCM] < 0) mazeTable.rows[pR].cells[pC].classList.add('trail');
+				else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('pathBot');
 				}
-				mazeTable.rows[--pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('player');
-				pRM--;
+			} else {
+				if (mazeMatrix[pRM-1][pCM] == -1) {
+					mazeMatrix[pRM][pCM] = -2;
+					mazeTable.rows[pR].cells[pC].classList.add('trail');
+				} else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('path');
+				}
 			}
+			mazeTable.rows[--pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('player');
+			pRM--;
 		}
 		break;
 
 		case 40: // Down
 		case 83: // S
-		if (pRM+1 < size*2+1) {
-			if (mazeTable.rows[pR+1].cells[pC].classList.contains('goal')) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('path');
-				nextLevel();
-			} else if (!mazeMatrix[pRM+1][pCM]) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				if (bot) {
-					if (mazeTable.rows[pR+1].cells[pC].classList.contains('pathBot')) mazeTable.rows[pR].cells[pC].classList.add('trail');
-					else mazeTable.rows[pR].cells[pC].classList.add('pathBot');
-				} else {
-					if (mazeTable.rows[pR+1].cells[pC].classList.contains('path')) {
-						mazeTable.rows[pR].cells[pC].classList.add('trail');
-					} else mazeTable.rows[pR].cells[pC].classList.add('path');
+		if (pRM+1 == setSequenceM[setNum][2] && pCM == setSequenceM[setNum][3]) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('path');
+			nextLevel();
+		} else if (pRM+1 < size*2+1 && mazeMatrix[pRM+1][pCM] < 1) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			if (bot) {
+				if (mazeMatrix[pRM+1][pCM] < 0) mazeTable.rows[pR].cells[pC].classList.add('trail');
+				else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('pathBot');
 				}
-				mazeTable.rows[++pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('player');
-				pRM++;
+			} else {
+				if (mazeMatrix[pRM+1][pCM] == -1) {
+					mazeMatrix[pRM][pCM] = -2;
+					mazeTable.rows[pR].cells[pC].classList.add('trail');
+				} else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('path');
+				}
 			}
+			mazeTable.rows[++pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('player');
+			pRM++;
 		}
 		break;
 		
 		case 37: // Left
 		case 65: // A
-		if (pCM-1 > -1) {
-			if (mazeTable.rows[pR].cells[pC-1].classList.contains('goal')) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('path');
-				nextLevel();
-			} else if (!mazeMatrix[pRM][pCM-1]) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				if (bot) {
-					if (mazeTable.rows[pR].cells[pC-1].classList.contains('pathBot')) mazeTable.rows[pR].cells[pC].classList.add('trail');
-					else mazeTable.rows[pR].cells[pC].classList.add('pathBot');
-				} else {
-					if (mazeTable.rows[pR].cells[pC-1].classList.contains('path')) {
-						mazeTable.rows[pR].cells[pC].classList.add('trail');
-					} else mazeTable.rows[pR].cells[pC].classList.add('path');
+		if (pRM == setSequenceM[setNum][2] && pCM-1 == setSequenceM[setNum][3]) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('path');
+			nextLevel();
+		} else if (pCM-1 > -1 && mazeMatrix[pRM][pCM-1] < 1) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			if (bot) {
+				if (mazeMatrix[pRM][pCM-1] < 0) mazeTable.rows[pR].cells[pC].classList.add('trail');
+				else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('pathBot');
 				}
-				mazeTable.rows[pR].cells[--pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('player');
-				pCM--;
+			} else {
+				if (mazeMatrix[pRM][pCM-1] == -1) {
+					mazeMatrix[pRM][pCM] = -2;
+					mazeTable.rows[pR].cells[pC].classList.add('trail');
+				} else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('path');
+				}
 			}
+			mazeTable.rows[pR].cells[--pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('player');
+			pCM--;
 		}
 		break;
 		
 		case 39: // Right
 		case 68: // D
-		if (pCM+1 < size*2+1) {
-			if (mazeTable.rows[pR].cells[pC+1].classList.contains('goal')) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('path');
-				nextLevel();
-			} else if (!mazeMatrix[pRM][pCM+1]) {
-				mazeTable.rows[pR].cells[pC].className = '';
-				if (bot) {
-					if (mazeTable.rows[pR].cells[pC+1].classList.contains('pathBot')) mazeTable.rows[pR].cells[pC].classList.add('trail');
-					else mazeTable.rows[pR].cells[pC].classList.add('pathBot');
-				} else {
-					if (mazeTable.rows[pR].cells[pC+1].classList.contains('path')) {
-						mazeTable.rows[pR].cells[pC].classList.add('trail');
-					} else mazeTable.rows[pR].cells[pC].classList.add('path');
+		if (pRM == setSequenceM[setNum][2] && pCM+1 == setSequenceM[setNum][3]) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('path');
+			nextLevel();
+		} else if (pCM+1 < size*2+1 && mazeMatrix[pRM][pCM+1] < 1) {
+			mazeTable.rows[pR].cells[pC].className = '';
+			if (bot) {
+				if (mazeMatrix[pRM][pCM+1] < 0) mazeTable.rows[pR].cells[pC].classList.add('trail');
+				else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('pathBot');
 				}
-				mazeTable.rows[pR].cells[++pC].className = '';
-				mazeTable.rows[pR].cells[pC].classList.add('player');
-				pCM++;
+			} else {
+				if (mazeMatrix[pRM][pCM+1] == -1) {
+					mazeMatrix[pRM][pCM] = -2;
+					mazeTable.rows[pR].cells[pC].classList.add('trail');
+				} else {
+					mazeMatrix[pRM][pCM] = -1;
+					mazeTable.rows[pR].cells[pC].classList.add('path');
+				}
 			}
+			mazeTable.rows[pR].cells[++pC].className = '';
+			mazeTable.rows[pR].cells[pC].classList.add('player');
+			pCM++;
 		}
 		break;
 	}
@@ -450,8 +474,11 @@ function wallFollower(back, cb) {
 		} else walkW();
 	}
 	var timeOut = function() {
-		if (botOn) setTimeout(walkA, 0);
-		else if (bot) setTimeout(timeOut, 100);
+		if (++interval > speed) interval = 0;
+		if (botOn) {
+			if (interval) walkA();
+			else setTimeout(walkA, 0);
+		} else if (bot) setTimeout(timeOut, 100);
 	}
 	timer.textContent = steps.toLocaleString() + ' Steps';
 	timeOut();
@@ -495,33 +522,41 @@ toggle.addEventListener('click', function() {
 });
 
 reset.addEventListener('click', function() {
-	bot = false;
-	done = true;
+	if (bot) {
+		bot = false;
+		done = true;
+		speed = 0;
+		botButtons.textContent = 'Wall Follower';
+		botButtons.className = '';
+	}
 	pauseLeft = pauseAble;
 	stopwatch.reset();
 	document.getElementById('level').textContent = 'Level : 00';
 	toggle.textContent = 'Pause (3)';
-	botButtons.disabled = false;
-	botButtons.className = '';
 	while (list.firstChild) list.removeChild(list.firstChild);
 	gameStart();
 	resume();
 });
 
 botButtons.addEventListener('click', function() {
-	botButtons.disabled = true;
-	bot = true;
-	botOn = true;
-	steps = 0;
-	stopwatch.stop();
-	timer.textContent = '0 Steps';
-	document.getElementById('level').textContent = 'Level : 00';
-	toggle.textContent = 'Pause';
-	while (list.firstChild) list.removeChild(list.firstChild);
-	botButtons.classList.add('on');
-	document.body.getElementsByTagName('TABLE')[0].style.display = 'table';
-	gameStart();
-	botNextLevel();
+	if (!bot) {
+		bot = true;
+		botOn = true;
+		steps = 0;
+		stopwatch.stop();
+		timer.textContent = '0 Steps';
+		document.getElementById('level').textContent = 'Level : 00';
+		toggle.textContent = 'Pause';
+		while (list.firstChild) list.removeChild(list.firstChild);
+		botButtons.classList.add('on');
+		botButtons.textContent = 'Speed x1';
+		document.body.getElementsByTagName('TABLE')[0].style.display = 'table';
+		gameStart();
+		botNextLevel();
+	} else {
+		if ((speed = speed * 2 + 1) > 32) speed = 0;
+		botButtons.textContent = 'Speed x' + (speed + 1);
+	}
 });
 
 function botNextLevel() {
