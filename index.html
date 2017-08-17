@@ -3,15 +3,6 @@
 <head>
 	<title>Pop Resume</title>
 	<link rel="stylesheet" type="text/css" href="style.css" />
-	<script>
-		function show(shown) {
-			var x = document.getElementsByClassName('content');
-			for (var i = 0; i < x.length; i++) {
-				x[i].style.display = 'none';
-			}
-			document.getElementById(shown).style.display = 'block';
-		}
-	</script>
 </head>
 
 <body>
@@ -20,54 +11,65 @@
 			<h1>Pop Sornsak Thiravechyan</h1>
 		</div>
 		<div id="content_container">
-			<nav>
-				<div id="nav">
-					<h3>Navigation</h3>
-					<ul>
-						<li><a href="#" onclick="show('home')">Home</a></li>
-						<li><a href="#" onclick="show('about')">About</a></li>
-						<li><a href="#" onclick="show('projects')">Projects</a></li>
-						<li><a href="#" onclick="show('contact')">Contact</a></li>
-					</ul>
+			<div id="about" class="section">
+				<h2>About</h2>
+				<p>Hi, I'm Pop.</p>
+				<p><a href="/Pop-Thiravechyan-Resume-071817.pdf" download="">Download My Resume!</a></p>
+				<h3>Education</h3>
+				<p><b>Purdue University</b> | West Lafayette, IN</p>
+				<p class="tab">Expected Graduation: December 2018</p>
+				<p class="tab">B.S. in Computer Science</p>
+				<p class="tab">Relevant Coursework: Systems Programming, Computer Architecture, Programming in C, Data Structure and Algorithms, Problem Solving &amp Object Oriented Programming, Foundation of Computer Science, Virtual Reality Applications</p>
+				<p><b>Ruamrudee International School</b> | Minburi, Thailand</p>
+				<p class="tab">June 2014</p>
+			</div>
+			<hr noshade>
+			<div id="projects" class="section">
+				<h2>Projects</h2>
+				<div class="content">
+					<p><b><a href="https://github.com/popthira/The-Ripple">Music Visualizer</a></b> | Unreal Engine 4</p>
+					<p class="tab">May 2017</p>
+					<div id="videoWrapper">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/jTdOXGTMoa8" frameborder="0" allowfullscreen></iframe>
+					</div>
+					<p>Virtual Reality real time music visualizer with the use of particle system. Switchable between the Amplitude Mode (visualizing the amplitude of the music), and Spectrum Mode (visualizing the spectrum of the music) to better suit the genre of music currently playing.</p>
+					<p>I apologize for the video stuttering, my laptop can’t handle VR and video recording at the same time it’s no gaming laptop.</p>
 				</div>
-			</nav>
-			<div id="main">
-				<div id="home" class="content">
-					<h2>Home</h2>
-					<p>Heeello.</p>
+				<div class="content">
+					<p><b><a href="/Project/Endless Maze/mazeIndex.html">Endless Maze</a></b> | HTML, CSS, and Javascript</p>
+					<p class="tab">August 2017</p>
+					<img src="MazeImage.png">
+					<p>Maze game that generate new maze which grew in size according to the Fibonacci sequence using the Eller's algorithm. There is also a solver option which utilizes the Wall Follower maze solving algorithm.</p>
+					<p>Use either the arrow keys or WASD to move, or both, I’m not judging.</p>
 				</div>
-				<div id="about" class="content" style="display: none">
-					<h2>About</h2>
-					<p>Hi, I'm Pop.</p>
-					<p><a href="/Pop-Thiravechyan-Resume-071817.pdf" download="">Download My Resume!</a></p>
-					<h3>Education</h3>
-					<p><b>Purdue University</b> | West Lafayette, IN</p>
-					<p class="tab">Expected Graduation: December 2018</p>
-					<p class="tab">B.S. in Computer Science</p>
-					<p class="tab">Relevant Coursework: Systems Programming, Computer Architecture, Programming in C, Data Structure and Algorithms, Problem Solving &amp Object Oriented Programming, Foundation of Computer Science, Virtual Reality Applications</p>
-					<p><b>Ruamrudee International School</b> | Minburi, Thailand</p>
-					<p style="margin-left: 40px">June 2014</p>
-				</div>
-				<div id="projects" class="content" style="display: none">
-					<h2>Projects</h2>
-					<p>fbdfbdfbdgbdfs......</p>
-					<p><b>Music Visualizer</b> | Unreal Engine 4</p>
-					<p class="tab">May 2016</p>
-					<p class="tab"><a href="https://github.com/popthira/The-Ripple">Link</a></p>
-					<iframe width="560" height="315" src="https://www.youtube.com/embed/jTdOXGTMoa8" frameborder="0" allowfullscreen></iframe>
-					<p><b>Endless Maze</b> | JavaScript</p>
-					<p class="tab"><a href="/Project/Endless Maze/mazeIndex.html">In The Works</a></p>
-				</div>
-				<div id="contact" class="content" style="display: none">
-					<h2>Contact</h2>
-					<p>E-mail: sthirave@purdue.edu</p>
-					<p>Mobile: 707-342-5387</p>
-				</div>
+			</div>
+			<hr noshade>
+			<div id="contact" class="section">
+				<h2>Contact</h2>
+				<p>E-mail: sthirave@purdue.edu</p>
+				<p>Mobile: 707-342-5387</p>
 			</div>
 		</div>
 		<div id="footer">
 			Copyright &copy; 2017 Pop Sornsak Thiravechyan
 		</div>
 	</div>
+	<script>
+		window.addEventListener('resize', resize);
+		function resize() {
+			var container = document.getElementById('container');
+			var videoWrapper = document.getElementById('videoWrapper');
+			container.className = '';
+			videoWrapper.className = '';
+			if (window.innerWidth > 620) {
+				container.classList.add('big');
+				videoWrapper.classList.add('big');
+			} else {
+				container.classList.add('small');
+				videoWrapper.classList.add('small');
+			}
+		}
+		resize();
+	</script>
 </body>
 </html>

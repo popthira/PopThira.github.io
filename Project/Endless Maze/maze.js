@@ -526,7 +526,7 @@ reset.addEventListener('click', function() {
 		bot = false;
 		done = true;
 		speed = 0;
-		botButtons.textContent = 'Wall Follower';
+		botButtons.textContent = 'Solver';
 		botButtons.className = '';
 	}
 	pauseLeft = pauseAble;
